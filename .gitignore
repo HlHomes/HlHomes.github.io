@@ -9,3 +9,9 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# 简历原件含手机号等个人信息，这是公开仓库，不要提交。
+# 如果确实要提供简历下载，先做一份去掉手机号的版本放进 public/。
+*.pdf
+*.doc
+*.docx

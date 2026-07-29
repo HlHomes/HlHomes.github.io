@@ -5,6 +5,8 @@ import type { Lang } from '../../config';
 import { HOME_LIMITS, PROFILE } from '../../config';
 import { localePath, useTranslations } from '../../i18n/utils';
 import { getPosts } from '../../lib/posts';
+import EducationItem from '../EducationItem.astro';
+import ExperienceItem from '../ExperienceItem.astro';
 import PostCard from '../PostCard.astro';
 import ProjectCard from '../ProjectCard.astro';
 import PublicationItem from '../PublicationItem.astro';
@@ -17,6 +19,16 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+
+const byStartDesc = (a: { data: { start: string } }, b: { data: { start: string } }) =>
+  b.data.start.localeCompare(a.data.start);
+
+const education = (await getCollection('education')).sort(byStartDesc);
+const internships = (await getCollection('experience', ({ data }) => data.kind === 'internship'))
+  .sort(byStartDesc);
+const work = (await getCollection('experience', ({ data }) => data.kind === 'work')).sort(
+  byStartDesc,
+);
 
 const publications = (await getCollection('publications', ({ data }) => data.featured))
   .sort((a, b) => b.data.year - a.data.year)
@@ -34,6 +46,45 @@ const posts = (await getPosts(lang)).slice(0, HOME_LIMITS.posts);
     <SectionHeading title={t('home.about')} />
     <p class="max-w-[70ch] leading-[1.85] text-ink/90">{PROFILE.bio[lang]}</p>
   </section>
+
+  {
+    education.length > 0 && (
+      <section class="reveal">
+        <SectionHeading title={t('home.education')} />
+        <div>
+          {education.map((entry) => (
+            <EducationItem entry={entry} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    internships.length > 0 && (
+      <section class="reveal">
+        <SectionHeading title={t('home.internships')} />
+        <div>
+          {internships.map((entry) => (
+            <ExperienceItem entry={entry} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    work.length > 0 && (
+      <section class="reveal">
+        <SectionHeading title={t('home.work')} />
+        <div>
+          {work.map((entry) => (
+            <ExperienceItem entry={entry} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   <section class="reveal">
     <SectionHeading title={t('home.skills')} />

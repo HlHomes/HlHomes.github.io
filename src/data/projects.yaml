@@ -1,34 +1,78 @@
 # 项目列表。每条必须有唯一 id。
-# description 需要中英各一份；links 里不填的字段直接删掉即可。
-# featured: true 的会出现在首页「精选项目」。
+# description 需要中英各一份；links 里不填的字段整行删掉。
+# featured: true 的会出现在首页「精选项目」，按 year 倒序取 config.ts 里 HOME_LIMITS.projects 条。
+
+- id: doc-qa-agent
+  name: 多模态智能文档回答 Agent
+  description:
+    zh: 面向复杂文档问答的认知型 Agent。构建 MQE + HyDE 双路混合检索，并设计工作/情景/语义/感知四层记忆架构（Neo4j + Qdrant）；复杂问题 Top-3 召回准确率提升约 25%，幻觉率降低 40% 以上。
+    en: A cognitive agent for complex document QA. Combines MQE and HyDE hybrid retrieval with a four-layer memory architecture (working, episodic, semantic, perceptual) on Neo4j and Qdrant. Top-3 recall on hard questions improved ~25%; hallucination rate cut by over 40%.
+  tags:
+    - Agent
+    - RAG
+    - LangChain
+    - Neo4j
+    - Qdrant
+  year: 2026
+  featured: true
+  links: {}
+
+- id: minionerec-opt
+  name: MiniOneRec 生成式推荐框架优化
+  description:
+    zh: 以 Qwen3-1.5B 为基座、语义 ID 将推荐转为序列生成任务。引入 RQ-OPQ 分层残差量化缓解长尾表征坍缩，重构 GRPO 采样与多目标奖励；HitRate@10 +4.7%、长尾 Recall +8.3%、NDCG@10 +5.8%，训练显卡需求从 4×A100 降至 2 张。
+    en: Generative recommendation on Amazon Review data with Qwen3-1.5B and semantic IDs. Added RQ-OPQ hierarchical residual quantisation to fix long-tail representation collapse and reworked GRPO sampling with a multi-objective reward. HitRate@10 +4.7%, long-tail Recall +8.3%, NDCG@10 +5.8%, and training GPUs reduced from 4×A100 to 2.
+  tags:
+    - Generative Recommendation
+    - Qwen3
+    - RQ-VAE
+    - GRPO
+    - LoRA
+  year: 2026
+  featured: true
+  # 你账号下的 MiniOneRec 是官方仓库的 fork，不是这次优化工作的代码。
+  # 如果优化代码确实推到了那里（或另开了仓库），把地址填上并取消注释。
+  # links:
+  #   repo: https://github.com/HlHomes/MiniOneRec
+  links: {}
 
 - id: dacg-ir
   name: DACG-IR
-  # TODO: 这是你自己的仓库，但我不清楚 DACG 的准确全称与方法要点，请改成你的一句话介绍。
   description:
-    zh: 图像修复方向的研究代码实现，包含训练与评估流程。
-    en: Research code for an image restoration method, including training and evaluation pipelines.
+    zh: 论文《Degradation-Aware Adaptive Context Gating for Unified Image Restoration》的官方实现。通过多尺度退化提示动态调控注意力分布与频域调制，并设计空间-通道双门控融合，在 All-in-One、单任务、恶劣天气与复合退化基准上均取得 SOTA。
+    en: Official implementation of "Degradation-Aware Adaptive Context Gating for Unified Image Restoration". Multi-scale degradation prompts modulate attention and frequency response, with a spatial-channel dual-gating fusion. Reaches SOTA on all-in-one, single-task, adverse-weather and composite-degradation benchmarks.
   tags:
     - Image Restoration
+    - Low-Level Vision
     - PyTorch
-    - Python
   year: 2025
   stars: 7
   featured: true
   links:
     repo: https://github.com/HlHomes/DACG-IR-code
+    paper: https://arxiv.org/abs/2605.01236
 
-- id: sample-project
-  name: 示例项目
+- id: qwen3-medical
+  name: Qwen3-1.7B 中文医疗推理模型微调与量化
   description:
-    zh: 这是一条示例记录，用来演示卡片的完整字段。照着上面的格式加你自己的项目，然后把这条删掉。
-    en: A sample entry demonstrating every field of the project card. Copy the shape above for your own work, then delete this one.
+    zh: 医疗垂域的 SFT 微调、量化压缩与服务化全链路。对比全参 / LoRA / QLoRA，QLoRA 仅需 9GB 显存达 84.1% 准确率；AWQ 4-bit 将模型压到 0.85GB、显存 2.1GB、首字延迟 1.5s→0.4s；接入 vLLM 后吞吐提升 3 倍。
+    en: End-to-end SFT, quantisation and serving for a Chinese medical reasoning model. QLoRA reaches 84.1% accuracy within 9GB VRAM; AWQ 4-bit compresses the model to 0.85GB with 2.1GB VRAM and cuts TTFT from 1.5s to 0.4s; vLLM triples throughput.
   tags:
-    - Mixture-of-Experts
-    - CUDA
+    - LLM Fine-tuning
+    - QLoRA
+    - AWQ
+    - vLLM
   year: 2026
-  featured: true
-  placeholder: true
-  links:
-    repo: https://github.com/HlHomes
-    demo: https://hlhomes.github.io
+  links: {}
+
+- id: railway-defect
+  name: 国家重载铁路轨道缺陷检测
+  description:
+    zh: 主要参与人，独立负责从数据集构建到模型落地的全流程。基于 YOLO11 与 RT-DETR 设计检测算法，解决复杂场景下的轨道缺陷识别问题；产出 2 篇中文核心期刊论文、2 项授权专利，并参与编写领域专著 1 部。
+    en: Key contributor, owning the pipeline from dataset construction to deployment. Built detection models on YOLO11 and RT-DETR for track defects under difficult conditions. Outcomes include two CSCD journal papers, two granted patents and a co-authored monograph.
+  tags:
+    - Object Detection
+    - YOLO11
+    - RT-DETR
+  year: 2025
+  links: {}

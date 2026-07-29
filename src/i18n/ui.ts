@@ -18,6 +18,9 @@ export const ui = {
     'nav.close': '关闭菜单',
 
     'home.about': '关于我',
+    'home.education': '教育背景',
+    'home.internships': '实习经历',
+    'home.work': '工作经历',
     'home.skills': '技能栈',
     'home.publications': '精选论文',
     'home.projects': '精选项目',
@@ -43,6 +46,7 @@ export const ui = {
 
     'meta.placeholder': '示例数据，请替换',
     'meta.stars': 'Stars',
+    'meta.present': '至今',
 
     'link.pdf': 'PDF',
     'link.code': '代码',
@@ -70,6 +74,9 @@ export const ui = {
     'nav.close': 'Close menu',
 
     'home.about': 'About',
+    'home.education': 'Education',
+    'home.internships': 'Internships',
+    'home.work': 'Experience',
     'home.skills': 'Skills',
     'home.publications': 'Selected Publications',
     'home.projects': 'Selected Projects',
@@ -95,6 +102,7 @@ export const ui = {
 
     'meta.placeholder': 'Sample data — replace me',
     'meta.stars': 'Stars',
+    'meta.present': 'Present',
 
     'link.pdf': 'PDF',
     'link.code': 'Code',

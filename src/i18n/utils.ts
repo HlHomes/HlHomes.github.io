@@ -49,3 +49,8 @@ export function postPath(id: string, lang: Lang): string {
   const slug = id.replace(/^(zh|en)\//, '');
   return localePath(`/blog/${slug}`, lang);
 }
+
+/** '2024-09' + '2027-06' -> '2024-09 – 2027-06'. An empty end reads as "present". */
+export function formatRange(start: string, end: string, lang: Lang): string {
+  return `${start} – ${end || ui[lang]['meta.present']}`;
+}

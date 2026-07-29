@@ -1,53 +1,52 @@
 # 论文 / 专利列表。每条必须有唯一 id，按 year 倒序自动排列。
 # type: conference | journal | preprint | patent
-# placeholder: true 会在页面上显示「示例数据，请替换」标记 —— 换成你的真实记录后删掉这一行。
-# links 里不填的字段直接删掉，不要留空字符串。
+# links 里不填的字段整行删掉，不要留空字符串。
 # 作者名与 config.ts 里 PROFILE.authorAliases 匹配的会自动加粗。
 
-- id: sample-conference-paper
-  title: 'Degradation-Aware Prompting for All-in-One Image Restoration'
+- id: dacg-ir-tip
+  title: 'Degradation-Aware Adaptive Context Gating for Unified Image Restoration'
   authors:
-    - Helei
-    - Coauthor A
-    - Coauthor B
-  venue: CVPR
+    - Lei He
+  venue: IEEE Transactions on Image Processing (TIP)
   year: 2026
-  type: conference
-  note:
-    zh: 口头报告
-    en: Oral
-  featured: true
-  placeholder: true
-  links:
-    pdf: https://example.com/paper.pdf
-    code: https://github.com/HlHomes/DACG-IR-code
-    bibtex: https://example.com/paper.bib
-
-- id: sample-journal-paper
-  title: 'A Survey on Mixture-of-Experts for Low-Level Vision'
-  authors:
-    - Coauthor A
-    - Helei
-    - Coauthor C
-  venue: IEEE TPAMI
-  year: 2025
   type: journal
-  featured: true
-  placeholder: true
-  links:
-    doi: https://doi.org/10.0000/example
-    pdf: https://example.com/survey.pdf
-
-- id: sample-patent
-  title: '一种基于退化先验的图像复原方法及装置'
-  authors:
-    - Helei
-    - Coauthor A
-  venue: 中国发明专利
-  year: 2025
-  type: patent
   note:
-    zh: 已授权
-    en: Granted
-  placeholder: true
-  links: {}
+    zh: 在投 · 第一作者 · CCF-A
+    en: Under Review · First Author · CCF-A
+  featured: true
+  links:
+    pdf: https://arxiv.org/pdf/2605.01236
+    code: https://github.com/HlHomes/DACG-IR-code
+    project: https://arxiv.org/abs/2605.01236
+
+# ────────────────────────────────────────────────────────────
+# 简历里还提到以下成果，但没写标题，我没有编造。
+# 把标题填上、取消注释即可显示：
+#   · 2 篇中文核心期刊论文（均已录用）
+#   · 2 项发明专利（已获授权）
+#   · 参与编写轨道交通领域专著 1 部
+# ────────────────────────────────────────────────────────────
+#
+# - id: cn-journal-1
+#   title: '这里填中文期刊论文标题'
+#   authors:
+#     - 贺磊
+#   venue: 某某学报
+#   year: 2025
+#   type: journal
+#   note:
+#     zh: 已录用 · 中文核心
+#     en: Accepted · CSCD
+#   links: {}
+#
+# - id: patent-1
+#   title: '这里填专利名称'
+#   authors:
+#     - 贺磊
+#   venue: 中国发明专利
+#   year: 2025
+#   type: patent
+#   note:
+#     zh: 已授权
+#     en: Granted
+#   links: {}

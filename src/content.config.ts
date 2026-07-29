@@ -3,6 +3,35 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 
 const localized = z.object({ zh: z.string(), en: z.string() });
+const localizedList = z.object({ zh: z.array(z.string()), en: z.array(z.string()) });
+
+const education = defineCollection({
+  loader: file('./src/data/education.yaml'),
+  schema: z.object({
+    school: localized,
+    badge: z.string().optional(),
+    degree: localized,
+    major: localized,
+    start: z.string(),
+    end: z.string(),
+    highlights: localizedList.optional(),
+  }),
+});
+
+const experience = defineCollection({
+  loader: file('./src/data/experience.yaml'),
+  schema: z.object({
+    /** Splits the single YAML file into the two homepage sections. */
+    kind: z.enum(['internship', 'work']),
+    company: localized,
+    role: localized,
+    location: localized.optional(),
+    start: z.string(),
+    /** Empty string renders as "present". */
+    end: z.string(),
+    highlights: localizedList.optional(),
+  }),
+});
 
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '**/*.md' }),
@@ -63,4 +92,4 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { blog, publications, projects };
+export const collections = { blog, publications, projects, education, experience };

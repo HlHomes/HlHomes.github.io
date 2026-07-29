@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '../config';
+import { formatRange } from '../i18n/utils';
+
+interface Props {
+  entry: CollectionEntry<'education'>;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { school, badge, degree, major, start, end, highlights } = entry.data;
+---
+
+<article class="border-b border-line py-5 last:border-b-0">
+  <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-5">
+    <h3 class="flex flex-wrap items-baseline gap-2 font-medium">
+      {school[lang]}
+      {
+        badge && (
+          <span class="rounded border border-brand/40 px-1.5 py-px text-xs font-normal text-brand">
+            {badge}
+          </span>
+        )
+      }
+    </h3>
+    <span class="shrink-0 text-xs text-subtle tabular-nums">{formatRange(start, end, lang)}</span>
+  </div>
+
+  <p class="mt-1.5 text-sm text-subtle">{degree[lang]} · {major[lang]}</p>
+
+  {
+    highlights && highlights[lang].length > 0 && (
+      <ul class="mt-2.5 flex list-outside list-disc flex-col gap-1 pl-4 text-sm leading-relaxed text-subtle marker:text-line">
+        {highlights[lang].map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>
