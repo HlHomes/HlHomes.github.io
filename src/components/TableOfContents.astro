@@ -1,0 +1,31 @@
+---
+import type { MarkdownHeading } from 'astro';
+import type { Lang } from '../config';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  headings: MarkdownHeading[];
+  lang: Lang;
+}
+
+const { headings, lang } = Astro.props;
+const t = useTranslations(lang);
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length > 1 && (
+    <nav class="mb-10 rounded-lg border border-line bg-surface/50 px-4 py-3 text-sm">
+      <p class="mb-2 text-xs tracking-[0.15em] text-subtle">{t('blog.toc')}</p>
+      <ol class="flex flex-col gap-1.5">
+        {items.map((h) => (
+          <li class:list={[h.depth === 3 && 'pl-4']}>
+            <a href={`#${h.slug}`} class="text-subtle transition-colors hover:text-brand">
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

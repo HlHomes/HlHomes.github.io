@@ -1,0 +1,261 @@
+@import 'tailwindcss';
+
+@plugin "@tailwindcss/typography";
+
+/* Drive `dark:` from a class instead of prefers-color-scheme so the toggle works. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Plain `@theme` (not `@theme inline`) so utilities emit var() references —
+   that is what lets html.dark below re-point every colour at once. */
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC', sans-serif;
+  --font-mono:
+    ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+
+  --color-canvas: oklch(0.99 0.002 90);
+  --color-surface: oklch(0.972 0.003 90);
+  --color-ink: oklch(0.25 0.01 260);
+  --color-subtle: oklch(0.55 0.012 260);
+  --color-line: oklch(0.9 0.005 260);
+  --color-brand: oklch(0.5 0.15 258);
+  --color-brand-soft: oklch(0.955 0.022 258);
+
+  --text-xs: 0.78rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.1rem;
+  --text-xl: 1.3rem;
+  --text-2xl: 1.6rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+}
+
+html.dark {
+  --color-canvas: oklch(0.17 0.008 260);
+  --color-surface: oklch(0.212 0.009 260);
+  --color-ink: oklch(0.93 0.005 260);
+  --color-subtle: oklch(0.68 0.012 260);
+  --color-line: oklch(0.3 0.01 260);
+  --color-brand: oklch(0.76 0.13 258);
+  --color-brand-soft: oklch(0.27 0.04 258);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-line);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-subtle);
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-soft);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Keep anchor targets clear of the sticky header. */
+  :target,
+  h2[id],
+  h3[id],
+  h4[id] {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+/* Map the typography plugin onto our own tokens so a single palette drives
+   both chrome and prose, in either theme. */
+.prose {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-lead: var(--color-subtle);
+  --tw-prose-links: var(--color-brand);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-counters: var(--color-subtle);
+  --tw-prose-bullets: var(--color-line);
+  --tw-prose-hr: var(--color-line);
+  --tw-prose-quotes: var(--color-subtle);
+  --tw-prose-quote-borders: var(--color-line);
+  --tw-prose-captions: var(--color-subtle);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-th-borders: var(--color-line);
+  --tw-prose-td-borders: var(--color-line);
+}
+
+.prose :where(a):not(:where(.not-prose *)) {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.prose :where(:not(pre) > code):not(:where(.not-prose *)) {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+  font-weight: 500;
+  font-size: 0.875em;
+}
+
+.prose :where(:not(pre) > code):not(:where(.not-prose *))::before,
+.prose :where(:not(pre) > code):not(:where(.not-prose *))::after {
+  content: none;
+}
+
+/* Shiki inlines the light theme and exposes the dark one as custom properties.
+   Astro renames the `.shiki` class to `.astro-code`. */
+.prose :where(pre.astro-code):not(:where(.not-prose *)) {
+  border: 1px solid var(--color-line);
+  border-radius: 0.5rem;
+  padding: 1rem 1.15rem;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+/* Long display equations should scroll rather than break the layout. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}
+
+.katex {
+  font-size: 1.05em;
+}
+
+/* ---------------------------------------------------------------------------
+   视觉特效。全部为纯 CSS，不加载任何运行时 JS。
+   想整体关掉，把下面到文件末尾的内容删掉，再移除模板里的 reveal / page-glow 等
+   class 即可，功能不受影响。详见 docs/维护指南.md 的「更换特效」一节。
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Scroll-driven, so no IntersectionObserver and no client JS is needed.
+   Browsers without animation-timeline just render the final state. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 85%;
+    }
+  }
+}
+
+/* Oversized on purpose so the halo never shows a visible edge.
+   Sits at z-index 0 above the body background; the content wrapper is z-10.
+   (A negative z-index would fall behind the propagated canvas background.) */
+.page-glow {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: 32rem;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.75;
+  background:
+    radial-gradient(60rem 22rem at 18% -7rem, var(--color-brand-soft), transparent 70%),
+    radial-gradient(46rem 18rem at 88% -9rem, var(--color-brand-soft), transparent 70%);
+}
+
+html.dark .page-glow {
+  opacity: 0.45;
+}
+
+.avatar-glow {
+  box-shadow:
+    0 0 0 1px var(--color-line),
+    0 12px 32px -14px color-mix(in oklab, var(--color-brand) 55%, transparent);
+}
+
+/* Hairline that fades out to the right — softer than a full-width border. */
+.rule-fade {
+  height: 1px;
+  background: linear-gradient(to right, var(--color-line), transparent);
+}
+
+/* Underline that grows from the left on hover. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.25s ease;
+}
+
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+

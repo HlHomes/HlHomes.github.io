@@ -1,0 +1,31 @@
+---
+import type { Lang } from '../../config';
+import { useTranslations } from '../../i18n/utils';
+import { getPosts } from '../../lib/posts';
+import PostCard from '../PostCard.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const posts = await getPosts(lang);
+---
+
+<header class="reveal mb-10">
+  <h1 class="text-3xl font-semibold tracking-tight">{t('blog.title')}</h1>
+  <p class="mt-2 text-subtle">{t('blog.description')}</p>
+</header>
+
+{
+  posts.length === 0 ? (
+    <p class="text-subtle">{t('blog.empty')}</p>
+  ) : (
+    <div class="reveal">
+      {posts.map((entry) => (
+        <PostCard entry={entry} lang={lang} />
+      ))}
+    </div>
+  )
+}

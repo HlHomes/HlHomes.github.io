@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '../config';
+import { formatDate, postPath } from '../i18n/utils';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { title, description, pubDate, tags } = entry.data;
+const href = postPath(entry.id, lang);
+---
+
+<article class="border-b border-line py-5 last:border-b-0">
+  <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-5">
+    <h3 class="leading-snug font-medium">
+      <a href={href} class="transition-colors hover:text-brand">{title}</a>
+    </h3>
+    <time datetime={pubDate.toISOString()} class="shrink-0 text-xs text-subtle tabular-nums">
+      {formatDate(pubDate, lang)}
+    </time>
+  </div>
+
+  <p class="mt-1.5 text-sm leading-relaxed text-subtle">{description}</p>
+
+  {
+    tags.length > 0 && (
+      <ul class="mt-2 flex flex-wrap gap-1.5">
+        {tags.map((tag) => (
+          <li class="rounded border border-line px-1.5 py-px text-xs text-subtle">{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>

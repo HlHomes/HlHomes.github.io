@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+
+import type { Lang } from '../../config';
+import { useTranslations } from '../../i18n/utils';
+import ProjectCard from '../ProjectCard.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0),
+);
+---
+
+<header class="reveal mb-10">
+  <h1 class="text-3xl font-semibold tracking-tight">{t('projects.title')}</h1>
+  <p class="mt-2 text-subtle">{t('projects.description')}</p>
+</header>
+
+{
+  projects.length === 0 ? (
+    <p class="text-subtle">{t('projects.empty')}</p>
+  ) : (
+    <div class="reveal grid gap-3 sm:grid-cols-2">
+      {projects.map((entry) => (
+        <ProjectCard entry={entry} lang={lang} />
+      ))}
+    </div>
+  )
+}

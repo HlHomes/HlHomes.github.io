@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '../config';
+import { PROFILE } from '../config';
+import type { UIKey } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  entry: CollectionEntry<'publications'>;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const { title, authors, venue, year, note, links, placeholder } = entry.data;
+
+const isSelf = (author: string) =>
+  PROFILE.authorAliases.some((alias) => alias.toLowerCase() === author.toLowerCase());
+
+const candidates: ReadonlyArray<[UIKey, string | undefined]> = [
+  ['link.pdf', links.pdf],
+  ['link.code', links.code],
+  ['link.project', links.project],
+  ['link.doi', links.doi],
+  ['link.bibtex', links.bibtex],
+];
+const linkEntries = candidates.filter((pair): pair is [UIKey, string] => Boolean(pair[1]));
+---
+
+<article class="border-b border-line py-5 last:border-b-0">
+  <h3 class="text-base leading-snug font-medium">{title}</h3>
+
+  <p class="mt-1.5 text-sm text-subtle">
+    {
+      authors.map((author, i) => (
+        <Fragment>
+          {i > 0 ? ', ' : ''}
+          <span class:list={[isSelf(author) && 'font-semibold text-ink']}>{author}</span>
+        </Fragment>
+      ))
+    }
+  </p>
+
+  <p class="mt-1.5 flex flex-wrap items-center gap-2 text-sm">
+    <span class="text-subtle">{venue} · {year}</span>
+    {
+      note && (
+        <span class="rounded border border-brand/40 px-1.5 py-px text-xs text-brand">
+          {note[lang]}
+        </span>
+      )
+    }
+    {
+      placeholder && (
+        <span class="rounded bg-brand-soft px-1.5 py-px text-xs text-brand">
+          {t('meta.placeholder')}
+        </span>
+      )
+    }
+  </p>
+
+  {
+    linkEntries.length > 0 && (
+      <p class="mt-2.5 flex flex-wrap gap-3 text-sm">
+        {linkEntries.map(([key, url]) => (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener"
+            class="text-brand underline decoration-brand/30 underline-offset-4 transition-colors hover:decoration-brand"
+          >
+            {t(key)}
+          </a>
+        ))}
+      </p>
+    )
+  }
+</article>

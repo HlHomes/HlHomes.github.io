@@ -1,0 +1,11 @@
+---
+import BlogListView from '../../../components/views/BlogListView.astro';
+import { useTranslations } from '../../../i18n/utils';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const t = useTranslations('en');
+---
+
+<BaseLayout lang="en" title={t('blog.title')} description={t('blog.description')}>
+  <BlogListView lang="en" />
+</BaseLayout>

@@ -1,0 +1,88 @@
+---
+import '../styles/global.css';
+
+import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
+import type { Lang } from '../config';
+import { PROFILE, SITE } from '../config';
+import { htmlLang, localePath, stripLangPrefix } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Post pages pass their translation's URL so the language switch lands correctly. */
+  alternateHref?: string;
+  ogType?: 'website' | 'article';
+}
+
+const { lang, title, description, alternateHref, ogType = 'website' } = Astro.props;
+
+const pageTitle = title
+  ? `${title} · ${SITE.name[lang]}`
+  : `${SITE.name[lang]} · ${PROFILE.tagline[lang]}`;
+const pageDescription = description ?? SITE.description[lang];
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const basePath = stripLangPrefix(Astro.url.pathname);
+const zhHref = new URL(localePath(basePath, 'zh'), Astro.site);
+const enHref = new URL(localePath(basePath, 'en'), Astro.site);
+---
+
+<!doctype html>
+<html lang={htmlLang[lang]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-CN" href={zhHref} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={zhHref} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE.name[lang]}
+      href={localePath('/rss.xml', lang)}
+    />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta name="twitter:card" content="summary" />
+
+    <script is:inline>
+      // Must run before first paint — a deferred module script would flash light on reload.
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle(
+        'dark',
+        stored === 'dark' || (!stored && prefersDark),
+      );
+    </script>
+  </head>
+
+  <body class="relative">
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <div
+      class="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-5 sm:px-8 lg:flex-row lg:gap-14"
+    >
+      <Sidebar lang={lang} alternateHref={alternateHref} />
+
+      <div class="flex min-w-0 flex-1 flex-col">
+        <main class="flex-1 py-10 lg:py-16">
+          <slot />
+        </main>
+        <Footer lang={lang} />
+      </div>
+    </div>
+  </body>
+</html>

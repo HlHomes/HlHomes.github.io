@@ -1,0 +1,11 @@
+---
+import PublicationsView from '../components/views/PublicationsView.astro';
+import { useTranslations } from '../i18n/utils';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const t = useTranslations('zh');
+---
+
+<BaseLayout lang="zh" title={t('publications.title')} description={t('publications.description')}>
+  <PublicationsView lang="zh" />
+</BaseLayout>

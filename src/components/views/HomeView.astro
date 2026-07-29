@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+
+import type { Lang } from '../../config';
+import { HOME_LIMITS, PROFILE } from '../../config';
+import { localePath, useTranslations } from '../../i18n/utils';
+import { getPosts } from '../../lib/posts';
+import PostCard from '../PostCard.astro';
+import ProjectCard from '../ProjectCard.astro';
+import PublicationItem from '../PublicationItem.astro';
+import SectionHeading from '../SectionHeading.astro';
+import SkillStack from '../SkillStack.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const publications = (await getCollection('publications', ({ data }) => data.featured))
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, HOME_LIMITS.publications);
+
+const projects = (await getCollection('projects', ({ data }) => data.featured))
+  .sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0))
+  .slice(0, HOME_LIMITS.projects);
+
+const posts = (await getPosts(lang)).slice(0, HOME_LIMITS.posts);
+---
+
+<div class="flex flex-col gap-14">
+  <section class="reveal">
+    <SectionHeading title={t('home.about')} />
+    <p class="max-w-[70ch] leading-[1.85] text-ink/90">{PROFILE.bio[lang]}</p>
+  </section>
+
+  <section class="reveal">
+    <SectionHeading title={t('home.skills')} />
+    <SkillStack lang={lang} />
+  </section>
+
+  {
+    publications.length > 0 && (
+      <section class="reveal">
+        <SectionHeading
+          title={t('home.publications')}
+          href={localePath('/publications', lang)}
+          linkLabel={t('home.viewAll')}
+        />
+        <div>
+          {publications.map((entry) => (
+            <PublicationItem entry={entry} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    projects.length > 0 && (
+      <section class="reveal">
+        <SectionHeading
+          title={t('home.projects')}
+          href={localePath('/projects', lang)}
+          linkLabel={t('home.viewAll')}
+        />
+        <div class="grid gap-3 sm:grid-cols-2">
+          {projects.map((entry) => (
+            <ProjectCard entry={entry} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <section class="reveal">
+        <SectionHeading
+          title={t('home.posts')}
+          href={localePath('/blog', lang)}
+          linkLabel={t('home.viewAll')}
+        />
+        <div>
+          {posts.map((entry) => (
+            <PostCard entry={entry} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</div>

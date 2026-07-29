@@ -1,0 +1,26 @@
+---
+import { useTranslations } from '../i18n/utils';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const zh = useTranslations('zh');
+const en = useTranslations('en');
+---
+
+<!-- GitHub Pages serves this single file for every missing path, so it is bilingual. -->
+<BaseLayout lang="zh" title={zh('404.title')}>
+  <div class="flex flex-col items-start gap-5 py-10">
+    <p class="text-4xl font-semibold tracking-tight text-subtle tabular-nums">404</p>
+    <div>
+      <h1 class="text-2xl font-semibold tracking-tight">{zh('404.title')}</h1>
+      <p class="mt-1 text-subtle">{zh('404.description')}</p>
+    </div>
+    <div>
+      <h2 class="text-2xl font-semibold tracking-tight">{en('404.title')}</h2>
+      <p class="mt-1 text-subtle">{en('404.description')}</p>
+    </div>
+    <div class="flex gap-4 text-sm">
+      <a href="/" class="text-brand hover:underline">← {zh('404.back')}</a>
+      <a href="/en/" class="text-brand hover:underline">← {en('404.back')}</a>
+    </div>
+  </div>
+</BaseLayout>

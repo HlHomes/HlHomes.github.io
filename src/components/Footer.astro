@@ -1,0 +1,24 @@
+---
+import type { Lang } from '../config';
+import { PROFILE } from '../config';
+import { localePath, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<!-- Social links live in the sidebar, so they are deliberately not repeated here. -->
+<footer class="border-t border-line py-6">
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-subtle">
+    <p>© {year} {PROFILE.name[lang]}</p>
+    <a href={localePath('/rss.xml', lang)} class="link-underline transition-colors hover:text-ink">
+      RSS
+    </a>
+    <span>{t('footer.builtWith')}</span>
+  </div>
+</footer>

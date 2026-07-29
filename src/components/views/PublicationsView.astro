@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+
+import type { Lang } from '../../config';
+import { useTranslations } from '../../i18n/utils';
+import PublicationItem from '../PublicationItem.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const publications = (await getCollection('publications')).sort(
+  (a, b) => b.data.year - a.data.year,
+);
+const years = [...new Set(publications.map((entry) => entry.data.year))];
+---
+
+<header class="reveal mb-10">
+  <h1 class="text-3xl font-semibold tracking-tight">{t('publications.title')}</h1>
+  <p class="mt-2 text-subtle">{t('publications.description')}</p>
+</header>
+
+{
+  publications.length === 0 ? (
+    <p class="text-subtle">{t('publications.empty')}</p>
+  ) : (
+    <div class="flex flex-col gap-10">
+      {years.map((year) => (
+        <section class="reveal">
+          <h2 class="mb-1 text-xs tracking-[0.15em] text-subtle tabular-nums">{year}</h2>
+          <div>
+            {publications
+              .filter((entry) => entry.data.year === year)
+              .map((entry) => (
+                <PublicationItem entry={entry} lang={lang} />
+              ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}

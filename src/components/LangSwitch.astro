@@ -1,0 +1,25 @@
+---
+import type { Lang } from '../config';
+import { htmlLang, localePath, stripLangPrefix, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Post pages pass the translation's URL so the switch lands on the right article. */
+  alternateHref?: string;
+}
+
+const { lang, alternateHref } = Astro.props;
+const t = useTranslations(lang);
+const target: Lang = lang === 'zh' ? 'en' : 'zh';
+const href = alternateHref ?? localePath(stripLangPrefix(Astro.url.pathname), target);
+---
+
+<a
+  href={href}
+  hreflang={htmlLang[target]}
+  aria-label={t('lang.switch')}
+  title={t('lang.switch')}
+  class="grid size-8 place-items-center rounded-md text-xs font-medium text-subtle transition-colors hover:bg-surface hover:text-ink"
+>
+  {target === 'en' ? 'EN' : '中'}
+</a>

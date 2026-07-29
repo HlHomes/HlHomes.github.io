@@ -1,0 +1,46 @@
+---
+import { render } from 'astro:content';
+
+import { localePath, postPath } from '../../../i18n/utils';
+import PostLayout from '../../../layouts/PostLayout.astro';
+import { getPosts } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts('en');
+  return posts.map((post, index) => ({
+    params: { id: post.id.replace(/^en\//, '') },
+    props: {
+      post,
+      // The array is newest-first, so index + 1 is the chronologically older post.
+      olderPost: posts[index + 1],
+      newerPost: posts[index - 1],
+    },
+  }));
+}
+
+const { post, olderPost, newerPost } = Astro.props;
+const { Content, headings } = await render(post);
+
+const translation = post.data.translationKey
+  ? (await getPosts('zh')).find((p) => p.data.translationKey === post.data.translationKey)
+  : undefined;
+const alternateHref = translation ? postPath(translation.id, 'zh') : localePath('/blog', 'zh');
+
+const prev = olderPost
+  ? { title: olderPost.data.title, href: postPath(olderPost.id, 'en') }
+  : undefined;
+const next = newerPost
+  ? { title: newerPost.data.title, href: postPath(newerPost.id, 'en') }
+  : undefined;
+---
+
+<PostLayout
+  entry={post}
+  headings={headings}
+  lang="en"
+  alternateHref={alternateHref}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</PostLayout>

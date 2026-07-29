@@ -1,0 +1,11 @@
+---
+import ProjectsView from '../components/views/ProjectsView.astro';
+import { useTranslations } from '../i18n/utils';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const t = useTranslations('zh');
+---
+
+<BaseLayout lang="zh" title={t('projects.title')} description={t('projects.description')}>
+  <ProjectsView lang="zh" />
+</BaseLayout>

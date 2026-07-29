@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { title, href, linkLabel } = Astro.props;
+---
+
+<div class="mb-4">
+  <div class="flex items-baseline justify-between gap-4 pb-2">
+    <h2 class="text-xs font-medium tracking-[0.15em] text-subtle">{title}</h2>
+    {
+      href && linkLabel && (
+        <a
+          href={href}
+          class="link-underline shrink-0 text-xs text-brand transition-opacity hover:opacity-80"
+        >
+          {linkLabel} →
+        </a>
+      )
+    }
+  </div>
+  <div class="rule-fade"></div>
+</div>

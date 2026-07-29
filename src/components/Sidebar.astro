@@ -1,0 +1,111 @@
+---
+import type { Lang } from '../config';
+import { PROFILE, SOCIALS } from '../config';
+import type { UIKey } from '../i18n/ui';
+import { localePath, stripLangPrefix, useTranslations } from '../i18n/utils';
+import LangSwitch from './LangSwitch.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang: Lang;
+  alternateHref?: string;
+}
+
+const { lang, alternateHref } = Astro.props;
+const t = useTranslations(lang);
+const home = localePath('/', lang);
+const socials = SOCIALS.filter((s) => s.url);
+
+const navItems: ReadonlyArray<{ key: UIKey; path: string }> = [
+  { key: 'nav.home', path: '/' },
+  { key: 'nav.publications', path: '/publications' },
+  { key: 'nav.projects', path: '/projects' },
+  { key: 'nav.blog', path: '/blog' },
+];
+
+const currentPath = stripLangPrefix(Astro.url.pathname).replace(/\/+$/, '') || '/';
+const isActive = (path: string) =>
+  path === '/' ? currentPath === '/' : currentPath.startsWith(path);
+---
+
+<aside
+  class="border-b border-line py-5 lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-56 lg:shrink-0 lg:flex-col lg:justify-between lg:border-b-0 lg:py-16"
+>
+  <div class="flex flex-col gap-5 lg:gap-8">
+    <div class="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-4">
+      <a href={home} class="shrink-0">
+        <img
+          src={PROFILE.avatar}
+          alt={PROFILE.name[lang]}
+          width="80"
+          height="80"
+          class="avatar-glow size-11 rounded-full bg-surface object-cover lg:size-20"
+        />
+      </a>
+
+      <div class="min-w-0 flex-1 lg:flex-none">
+        <a
+          href={home}
+          class="block truncate bg-gradient-to-br from-ink to-subtle bg-clip-text text-base font-semibold tracking-tight text-transparent"
+        >
+          {PROFILE.name[lang]}
+        </a>
+        <p class="mt-1 hidden text-xs leading-relaxed text-subtle lg:block">
+          {PROFILE.tagline[lang]}
+        </p>
+      </div>
+
+      <!-- Mobile placement; the desktop pair lives at the bottom of the sidebar. -->
+      <div class="flex shrink-0 items-center gap-1 lg:hidden">
+        <LangSwitch lang={lang} alternateHref={alternateHref} />
+        <ThemeToggle lang={lang} />
+      </div>
+    </div>
+
+    <nav class="flex gap-5 text-sm lg:flex-col lg:gap-1">
+      {
+        navItems.map((item) => (
+          <a
+            href={localePath(item.path, lang)}
+            aria-current={isActive(item.path) ? 'page' : undefined}
+            class:list={[
+              'group flex items-center gap-2 transition-colors hover:text-ink',
+              isActive(item.path) ? 'font-medium text-ink' : 'text-subtle',
+            ]}
+          >
+            <span
+              class:list={[
+                'hidden h-px transition-all lg:block',
+                isActive(item.path) ? 'w-4 bg-brand' : 'w-2 bg-line group-hover:w-4',
+              ]}
+            />
+            {t(item.key)}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+
+  <div class="mt-8 hidden lg:flex lg:flex-col lg:gap-5">
+    {
+      socials.length > 0 && (
+        <div class="flex flex-col gap-1.5 text-sm">
+          {socials.map((s) => (
+            <a
+              href={s.url}
+              target={s.url.startsWith('http') ? '_blank' : undefined}
+              rel="me noopener"
+              class="link-underline self-start text-subtle transition-colors hover:text-ink"
+            >
+              {s.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+    <div class="flex items-center gap-1">
+      <LangSwitch lang={lang} alternateHref={alternateHref} />
+      <ThemeToggle lang={lang} />
+    </div>
+  </div>
+</aside>

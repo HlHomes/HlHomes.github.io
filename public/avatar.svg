@@ -1,0 +1,10 @@
+<!-- 占位头像。换成你的真实照片后，同步修改 src/config.ts 里的 PROFILE.avatar 路径。 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Avatar placeholder">
+  <rect width="128" height="128" fill="#eaeefb" />
+  <circle cx="64" cy="64" r="46" fill="#dde4f7" />
+  <g fill="#2f4fbf">
+    <rect x="38" y="34" width="12" height="60" rx="3" />
+    <rect x="78" y="34" width="12" height="60" rx="3" />
+    <rect x="38" y="58" width="52" height="12" rx="3" />
+  </g>
+</svg>
