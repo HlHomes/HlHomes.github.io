@@ -1,0 +1,12 @@
+# Store text files with LF in the repo regardless of the OS committing them.
+# Without this, Windows checkouts produce CRLF churn in diffs.
+* text=auto
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
