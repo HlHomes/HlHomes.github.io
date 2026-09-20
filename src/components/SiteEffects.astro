@@ -1,0 +1,58 @@
+---
+import type { Lang } from '../config';
+import { useTranslations } from '../i18n/utils';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+<div class="site-tools">
+  <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true" hidden>
+    <span class="motion-indicator" aria-hidden="true"></span>{t('motion.label')}
+  </button>
+  <a href="#top" class="back-top" aria-label={t('home.backTop')} title={t('home.backTop')}>↑</a>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const motionButton = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+  function syncMotion() {
+    if (!motionButton) return;
+    motionButton.hidden = false;
+    motionButton.disabled = reduced.matches;
+    motionButton.setAttribute('aria-pressed', String(!reduced.matches && root.dataset.motion !== 'off'));
+  }
+  motionButton?.addEventListener('click', () => {
+    root.dataset.motion = root.dataset.motion === 'off' ? 'on' : 'off';
+    try { localStorage.setItem('motion', root.dataset.motion); } catch { /* Storage is optional. */ }
+    syncMotion();
+  });
+  reduced.addEventListener('change', syncMotion);
+  syncMotion();
+
+  const progress = document.querySelector<HTMLElement>('[data-reading-progress]');
+  const anchors = [...document.querySelectorAll<HTMLAnchorElement>('.section-nav a')];
+  const sections = anchors.map((anchor) => document.getElementById(anchor.hash.slice(1)));
+  let scheduled = false;
+  function updateScroll() {
+    const max = root.scrollHeight - innerHeight;
+    if (progress) progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+    let active = -1;
+    sections.forEach((section, index) => {
+      if (section && section.getBoundingClientRect().top <= 180) active = index;
+    });
+    anchors.forEach((anchor, index) => {
+      if (active === index) anchor.setAttribute('aria-current', 'location');
+      else anchor.removeAttribute('aria-current');
+    });
+    scheduled = false;
+  }
+  const schedule = () => {
+    if (!scheduled) { scheduled = true; requestAnimationFrame(updateScroll); }
+  };
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule);
+  updateScroll();
+</script>

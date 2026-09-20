@@ -1,66 +1,30 @@
-# 实习经历与工作经历，共用这一个文件，靠 kind 字段区分：
-#   kind: internship  → 显示在「实习经历」板块
-#   kind: work        → 显示在「工作经历」板块
-# 每条必须有唯一 id，两个板块各自按 start 倒序排列。
-#
-# end 留空字符串 '' 表示「至今」。
-# highlights 是可选的工作要点（中英各一份）；实习目前按只写公司与时间的要求，不填要点。
-# 想给某条实习补上要点，照下面注释掉的示例加一个 highlights 段即可。
-
+# kind: internship / work；分别展示在实习经历 / 工作经历。
+# 仅展示公司、部门、职位、时间。end: '' 表示至今。
+# 时间区间照录最新简历；有正式工作后追加 kind: work 的记录即可。
 - id: stepfun-2026
   kind: internship
   company:
     zh: 上海阶跃星辰智能科技股份有限公司
     en: StepFun
+  department:
+    zh: 消费电子事业部
+    en: Consumer Electronics Division
   role:
     zh: AIGC 算法实习生
     en: AIGC Algorithm Intern
-  location:
-    zh: 成都
-    en: Chengdu
   start: '2026-05'
-  end: ''
-  # highlights:
-  #   zh:
-  #     - 负责屏下画质修复研发，构建多阶段粗修复 + 局部精炼流程。
-  #   en:
-  #     - Built a multi-stage pipeline for under-display image restoration.
+  end: '2026-11'
 
 - id: megvii-2025
   kind: internship
   company:
     zh: 北京旷视科技有限公司
     en: Megvii
+  department:
+    zh: AI 研究院
+    en: AI Research Institute
   role:
     zh: 人像感知算法实习生
     en: Face Perception Algorithm Intern
-  location:
-    zh: 成都
-    en: Chengdu
   start: '2025-08'
   end: '2026-03'
-
-# ────────────────────────────────────────────────────────────
-# 正式工作经历写在这里，把 kind 设为 work。目前还没有，
-# 所以首页的「工作经历」板块会自动隐藏，不会留一块空白。
-# 毕业入职后照下面的格式取消注释并填写即可。
-# ────────────────────────────────────────────────────────────
-#
-# - id: company-2027
-#   kind: work
-#   company:
-#     zh: 某某科技有限公司
-#     en: Some Company
-#   role:
-#     zh: 算法工程师
-#     en: Algorithm Engineer
-#   location:
-#     zh: 成都
-#     en: Chengdu
-#   start: '2027-07'
-#   end: ''
-#   highlights:
-#     zh:
-#       - 这里写做了什么、拿到什么结果。
-#     en:
-#       - What you did and what it achieved.

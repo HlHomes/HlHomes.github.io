@@ -2,6 +2,7 @@
 title: 这个站点怎么维护
 description: 加一篇文章、加一篇论文、改简介分别要动哪个文件。
 pubDate: 2026-07-28
+updatedDate: 2026-09-20
 lang: zh
 tags:
   - 站点
@@ -37,9 +38,17 @@ tags:
 
 作者名只要命中 `src/config.ts` 里 `PROFILE.authorAliases` 列出的写法，就会自动加粗，不用手动标。
 
-## 加一个项目
+## 项目展示
 
-编辑 `src/data/projects.yaml`，格式与论文类似，`description` 需要中英各一份。
+项目经历目前不在网站展示。原有数据保留在仓库中，旧项目网址会跳回首页；恢复步骤见仓库的 `docs/维护指南.md`。
+
+## 改教育与任职经历
+
+教育经历在 `src/data/education.yaml`，展示学校、专业、学位和时间。实习与工作共用 `src/data/experience.yaml`，展示公司、部门、职位和时间；`kind` 分别填 `internship` 或 `work`，部门填写中英双语的 `department`。
+
+## 动态效果与字号
+
+首页的研究方向可切换三种点阵图形，右下角「动态效果」按钮可暂停动画。系统开启「减少动态效果」时自动停止动画。正文桌面为 18px，手机为 17px；字号与布局在 `src/styles/global.css` 调整。
 
 ## 改简介、社交链接、技能栈
 

@@ -2,6 +2,7 @@
 title: Maintaining this site
 description: Which file to touch when adding a post, a paper, or editing the bio.
 pubDate: 2026-07-28
+updatedDate: 2026-09-20
 lang: en
 tags:
   - meta
@@ -37,9 +38,17 @@ Append a record to `src/data/publications.yaml`. `type` is one of `conference` /
 
 Author names matching `PROFILE.authorAliases` in `src/config.ts` are bolded automatically.
 
-## Adding a project
+## Project visibility
 
-Append to `src/data/projects.yaml`. Same shape, except `description` needs both languages.
+Project entries are currently hidden. Their source data remains in the repository, and old project URLs redirect to the home page. See `docs/维护指南.md` in the repository for restoration steps.
+
+## Education and experience
+
+Edit `src/data/education.yaml` for the school, major, degree and dates. Internships and employment share `src/data/experience.yaml`: use `kind: internship` or `kind: work`, and provide the company, bilingual `department`, role and dates.
+
+## Motion and typography
+
+The home page has three interactive research visualizations. The Motion button pauses animation; the system's reduced-motion preference also disables it. Body text is 18px on desktop and 17px on mobile. Adjust typography and layout in `src/styles/global.css`.
 
 ## Editing bio, socials, skills
 

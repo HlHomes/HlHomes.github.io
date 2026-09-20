@@ -13,7 +13,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const publications = (await getCollection('publications')).sort(
-  (a, b) => b.data.year - a.data.year,
+  (a, b) => b.data.year - a.data.year || Number(a.data.type === 'patent') - Number(b.data.type === 'patent'),
 );
 const years = [...new Set(publications.map((entry) => entry.data.year))];
 ---

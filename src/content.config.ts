@@ -24,6 +24,7 @@ const experience = defineCollection({
     /** Splits the single YAML file into the two homepage sections. */
     kind: z.enum(['internship', 'work']),
     company: localized,
+    department: localized,
     role: localized,
     location: localized.optional(),
     start: z.string(),
@@ -53,6 +54,7 @@ const publications = defineCollection({
   schema: z.object({
     title: z.string(),
     authors: z.array(z.string()),
+    attribution: localized.optional(),
     venue: z.string(),
     year: z.number(),
     type: z.enum(['conference', 'journal', 'preprint', 'patent']),

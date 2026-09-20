@@ -1,7 +1,7 @@
 /**
  * 全站唯一信息源 —— 改简介、社交、技能栈只需要动这个文件。
  *
- * 内容来自你的简历《贺磊-算法工程师.pdf》。教育背景与实习/工作经历不在这里，
+ * 内容依据 2026-09 更新的简历。教育背景与实习/工作经历不在这里，
  * 它们在 src/data/education.yaml 与 src/data/experience.yaml，详见 docs/维护指南.md。
  */
 
@@ -17,8 +17,8 @@ export const SITE = {
     en: 'Lei He',
   } satisfies Localized,
   description: {
-    zh: '算法工程师，研究方向为 Low-Level Vision 与统一图像修复，兼顾大模型应用、搜广推与 Agent 开发。',
-    en: 'Algorithm engineer working on low-level vision and unified image restoration, with interests in LLM applications, recommender systems and agents.',
+    zh: '贺磊，西南交通大学计算机与人工智能学院硕士研究生，导师为储节磊教授。研究方向：计算机视觉、图像/视频生成、模型推理加速。',
+    en: 'Lei He, a master\'s student at Southwest Jiaotong University, advised by Prof. Jielei Chu. Research in computer vision, image/video generation and model inference acceleration.',
   } satisfies Localized,
 };
 
@@ -27,10 +27,10 @@ export const PROFILE = {
     zh: '贺磊',
     en: 'Lei He',
   } satisfies Localized,
-  /** 侧栏姓名下方那行。侧栏只有 224px 宽，建议控制在 30 个汉字以内，否则会折成很多行 */
+  /** 侧栏姓名下方的研究定位，建议控制在 30 个汉字以内。 */
   tagline: {
-    zh: '算法工程师 · 视觉 / 大模型应用 / 搜广推 / Agent',
-    en: 'Algorithm Engineer · Vision / LLM Apps / RecSys / Agent',
+    zh: '计算机视觉 · 生成式 AI · 推理加速',
+    en: 'Computer Vision · Generative AI · Efficient Inference',
   } satisfies Localized,
   /** 侧栏显示的学校与单位，按顺序排列。想加减条目直接改这个数组 */
   affiliations: [
@@ -44,8 +44,8 @@ export const PROFILE = {
     },
   ] satisfies Localized[],
   bio: {
-    zh: '我是西南交通大学人工智能硕士在读，研究方向是 Low-Level Vision 与统一图像修复，一篇一作论文在投 IEEE TIP。目前在阶跃星辰做 AIGC 算法实习，负责屏下画质修复与端侧扩散模型的轻量化；此前在旷视科技做人像感知算法，参与过百亿级人脸识别算法的预训练、蒸馏与端侧部署。此外也在做大模型应用、生成式推荐与 Agent 方向的项目。这里记录我的论文、项目和技术笔记。',
-    en: "I am a master's student in Artificial Intelligence at Southwest Jiaotong University, working on low-level vision and unified image restoration; my first-author paper is under review at IEEE TIP. I am currently an AIGC algorithm intern at StepFun, working on under-display image restoration and lightweight on-device diffusion models. Previously at Megvii I worked on face perception, including pretraining, distillation and on-device deployment of billion-scale face recognition models. I also build projects around LLM applications, generative recommendation and agents. This site collects my papers, projects and technical notes.",
+    zh: '我当前在西南交通大学计算机与人工智能学院攻读硕士学位，导师为储节磊教授，研究方向为：计算机视觉、图像/视频生成、模型推理加速。欢迎浏览我的个人主页！😊',
+    en: "I am currently pursuing a master's degree at the School of Computing and Artificial Intelligence, Southwest Jiaotong University, advised by Prof. Jielei Chu. My research interests include computer vision, image/video generation, and model inference acceleration. Welcome to my personal website! 😊",
   } satisfies Localized,
   avatar: '/avatar.svg',
   location: {
@@ -76,42 +76,25 @@ export const SKILLS: ReadonlyArray<{
   items: readonly string[];
 }> = [
   {
-    group: { zh: '研究方向', en: 'Research' },
-    items: [
-      'Image Restoration',
-      'Low-Level Vision',
-      'Image Generation',
-      'Face Recognition',
-      'Generative Recommendation',
-      'Agent',
-    ],
+    group: { zh: '视觉与生成', en: 'Vision & Generation' },
+    items: ['PyTorch', 'Image Restoration', 'Diffusion', 'SD / Flux', 'ComfyUI', 'CLIP / SigLIP'],
   },
   {
-    group: { zh: '大模型与 AIGC', en: 'LLM & AIGC' },
-    items: [
-      'LoRA / QLoRA',
-      'GPTQ / AWQ',
-      'vLLM',
-      'RAG',
-      'LangChain',
-      'MCP',
-      'GRPO / PPO',
-      'Diffusion (Flux / SD)',
-    ],
+    group: { zh: '压缩与加速', en: 'Efficient Inference' },
+    items: ['Distillation', 'QAT / GPTQ / AWQ', 'ONNX', 'vLLM / Ollama', 'FlashAttention', 'CacheDiT'],
   },
   {
-    group: { zh: '框架与语言', en: 'Frameworks & Languages' },
-    items: ['PyTorch', 'Python', 'C', 'NumPy', 'OpenCV', 'MySQL', 'Transformer', 'CNN'],
+    group: { zh: '大模型与智能体', en: 'LLMs & Agents' },
+    items: ['SFT', 'LoRA / QLoRA', 'RAG', 'LangChain', 'MCP', 'Function Calling'],
   },
   {
     group: { zh: '工程工具', en: 'Tooling' },
-    items: ['Linux', 'SSH', 'Git', 'Docker', 'CUDA', 'Claude Code / Codex / TRAE'],
+    items: ['Python', 'Linux / SSH', 'Git', 'Claude Code / Codex / Cursor'],
   },
 ];
 
 /** 首页各板块展示条数 */
 export const HOME_LIMITS = {
   publications: 3,
-  projects: 3,
   posts: 3,
 };

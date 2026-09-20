@@ -3,6 +3,7 @@ import '../styles/global.css';
 
 import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
+import SiteEffects from '../components/SiteEffects.astro';
 import type { Lang } from '../config';
 import { PROFILE, SITE } from '../config';
 import { htmlLang, localePath, stripLangPrefix } from '../i18n/utils';
@@ -60,7 +61,11 @@ const enHref = new URL(localePath(basePath, 'en'), Astro.site);
 
     <script is:inline>
       // Must run before first paint — a deferred module script would flash light on reload.
-      const stored = localStorage.getItem('theme');
+      let stored = null;
+      try {
+        stored = localStorage.getItem('theme');
+        document.documentElement.dataset.motion = localStorage.getItem('motion') || 'on';
+      } catch { /* Render normally when storage is unavailable. */ }
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.classList.toggle(
         'dark',
@@ -69,20 +74,22 @@ const enHref = new URL(localePath(basePath, 'en'), Astro.site);
     </script>
   </head>
 
-  <body class="relative">
+  <body id="top" class="relative">
+    <a class="skip-link" href="#main-content">{lang === 'zh' ? '跳到正文' : 'Skip to content'}</a>
     <div class="page-glow" aria-hidden="true"></div>
 
     <div
-      class="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-5 sm:px-8 lg:flex-row lg:gap-14"
+      class="site-shell relative z-10 mx-auto flex min-h-screen flex-col px-5 sm:px-8 lg:flex-row"
     >
       <Sidebar lang={lang} alternateHref={alternateHref} />
 
       <div class="flex min-w-0 flex-1 flex-col">
-        <main class="flex-1 py-10 lg:py-16">
+        <main id="main-content" class="min-w-0 flex-1 py-8 lg:py-14" tabindex="-1">
           <slot />
         </main>
         <Footer lang={lang} />
       </div>
     </div>
+    <SiteEffects lang={lang} />
   </body>
 </html>

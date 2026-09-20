@@ -1,144 +1,90 @@
 ---
 import { getCollection } from 'astro:content';
-
 import type { Lang } from '../../config';
-import { HOME_LIMITS, PROFILE } from '../../config';
+import { HOME_LIMITS, PROFILE, SOCIALS } from '../../config';
 import { localePath, useTranslations } from '../../i18n/utils';
 import { getPosts } from '../../lib/posts';
 import EducationItem from '../EducationItem.astro';
 import ExperienceItem from '../ExperienceItem.astro';
 import PostCard from '../PostCard.astro';
-import ProjectCard from '../ProjectCard.astro';
 import PublicationItem from '../PublicationItem.astro';
+import ResearchField from '../ResearchField.astro';
 import SectionHeading from '../SectionHeading.astro';
 import SkillStack from '../SkillStack.astro';
 
-interface Props {
-  lang: Lang;
-}
-
+interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-
 const byStartDesc = (a: { data: { start: string } }, b: { data: { start: string } }) =>
   b.data.start.localeCompare(a.data.start);
-
 const education = (await getCollection('education')).sort(byStartDesc);
-const internships = (await getCollection('experience', ({ data }) => data.kind === 'internship'))
-  .sort(byStartDesc);
-const work = (await getCollection('experience', ({ data }) => data.kind === 'work')).sort(
-  byStartDesc,
-);
-
+const internships = (await getCollection('experience', ({ data }) => data.kind === 'internship')).sort(byStartDesc);
+const work = (await getCollection('experience', ({ data }) => data.kind === 'work')).sort(byStartDesc);
 const publications = (await getCollection('publications', ({ data }) => data.featured))
-  .sort((a, b) => b.data.year - a.data.year)
+  .sort((a, b) => b.data.year - a.data.year || Number(a.data.type === 'patent') - Number(b.data.type === 'patent'))
   .slice(0, HOME_LIMITS.publications);
-
-const projects = (await getCollection('projects', ({ data }) => data.featured))
-  .sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0))
-  .slice(0, HOME_LIMITS.projects);
-
 const posts = (await getPosts(lang)).slice(0, HOME_LIMITS.posts);
+const email = SOCIALS.find((social) => social.icon === 'mail' && social.url);
 ---
 
-<div class="flex flex-col gap-14">
-  <section class="reveal">
-    <SectionHeading title={t('home.about')} />
-    <p class="max-w-[70ch] leading-[1.85] text-ink/90">{PROFILE.bio[lang]}</p>
+<div class="home-content">
+  <section class="home-hero" aria-labelledby="intro-title">
+    <div class="hero-copy">
+      <div class="hero-eyebrow"><span class="status-dot" aria-hidden="true"></span>{t('home.welcome')}</div>
+      <h1 id="intro-title" class="hero-title">{PROFILE.name[lang]}<span>{lang === 'zh' ? 'LEI HE' : 'RESEARCH & ENGINEERING'}</span></h1>
+      <p class="hero-bio">{PROFILE.bio[lang]}</p>
+      <div class="hero-actions">
+        <a class="primary-link" href={localePath('/publications', lang)}>{t('home.readResearch')} <span aria-hidden="true">↗</span></a>
+        {email && <a class="secondary-link" href={email.url}>{t('home.contact')} <span aria-hidden="true">↗</span></a>}
+      </div>
+    </div>
+    <ResearchField lang={lang} />
+    <nav class="section-nav" aria-label={t('home.contents')}>
+      {education.length > 0 && <a href="#education">{t('home.education')}</a>}
+      {internships.length > 0 && <a href="#internships">{t('home.internships')}</a>}
+      {work.length > 0 && <a href="#work">{t('home.work')}</a>}
+      {publications.length > 0 && <a href="#publications">{t('home.publications')}</a>}
+      <a href="#skills">{t('home.skills')}</a>
+    </nav>
   </section>
 
-  {
-    education.length > 0 && (
-      <section class="reveal">
-        <SectionHeading title={t('home.education')} />
-        <div>
-          {education.map((entry) => (
-            <EducationItem entry={entry} lang={lang} />
-          ))}
-        </div>
-      </section>
-    )
-  }
+  {education.length > 0 && (
+    <section id="education" class="reveal">
+      <SectionHeading title={t('home.education')} index="01" />
+      <div class="timeline">{education.map((entry) => <EducationItem entry={entry} lang={lang} />)}</div>
+    </section>
+  )}
 
-  {
-    internships.length > 0 && (
-      <section class="reveal">
-        <SectionHeading title={t('home.internships')} />
-        <div>
-          {internships.map((entry) => (
-            <ExperienceItem entry={entry} lang={lang} />
-          ))}
-        </div>
-      </section>
-    )
-  }
+  {internships.length > 0 && (
+    <section id="internships" class="reveal">
+      <SectionHeading title={t('home.internships')} index="02" />
+      <div class="timeline">{internships.map((entry) => <ExperienceItem entry={entry} lang={lang} />)}</div>
+    </section>
+  )}
 
-  {
-    work.length > 0 && (
-      <section class="reveal">
-        <SectionHeading title={t('home.work')} />
-        <div>
-          {work.map((entry) => (
-            <ExperienceItem entry={entry} lang={lang} />
-          ))}
-        </div>
-      </section>
-    )
-  }
+  {work.length > 0 && (
+    <section id="work" class="reveal">
+      <SectionHeading title={t('home.work')} />
+      <div class="timeline">{work.map((entry) => <ExperienceItem entry={entry} lang={lang} />)}</div>
+    </section>
+  )}
 
-  <section class="reveal">
-    <SectionHeading title={t('home.skills')} />
+  {publications.length > 0 && (
+    <section id="publications" class="reveal">
+      <SectionHeading title={t('home.publications')} index="03" href={localePath('/publications', lang)} linkLabel={t('home.viewAll')} />
+      <div class="publication-list">{publications.map((entry) => <PublicationItem entry={entry} lang={lang} />)}</div>
+    </section>
+  )}
+
+  <section id="skills" class="reveal">
+    <SectionHeading title={t('home.skills')} index="04" />
     <SkillStack lang={lang} />
   </section>
 
-  {
-    publications.length > 0 && (
-      <section class="reveal">
-        <SectionHeading
-          title={t('home.publications')}
-          href={localePath('/publications', lang)}
-          linkLabel={t('home.viewAll')}
-        />
-        <div>
-          {publications.map((entry) => (
-            <PublicationItem entry={entry} lang={lang} />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  {
-    projects.length > 0 && (
-      <section class="reveal">
-        <SectionHeading
-          title={t('home.projects')}
-          href={localePath('/projects', lang)}
-          linkLabel={t('home.viewAll')}
-        />
-        <div class="grid gap-3 sm:grid-cols-2">
-          {projects.map((entry) => (
-            <ProjectCard entry={entry} lang={lang} />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  {
-    posts.length > 0 && (
-      <section class="reveal">
-        <SectionHeading
-          title={t('home.posts')}
-          href={localePath('/blog', lang)}
-          linkLabel={t('home.viewAll')}
-        />
-        <div>
-          {posts.map((entry) => (
-            <PostCard entry={entry} lang={lang} />
-          ))}
-        </div>
-      </section>
-    )
-  }
+  {posts.length > 0 && (
+    <section class="reveal">
+      <SectionHeading title={t('home.posts')} index="05" href={localePath('/blog', lang)} linkLabel={t('home.viewAll')} />
+      <div>{posts.map((entry) => <PostCard entry={entry} lang={lang} />)}</div>
+    </section>
+  )}
 </div>

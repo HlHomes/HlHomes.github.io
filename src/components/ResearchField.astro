@@ -1,0 +1,168 @@
+---
+import type { Lang } from '../config';
+import { useTranslations } from '../i18n/utils';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const modes = ['vision', 'generation', 'inference'] as const;
+---
+
+<figure class="research-field" data-research-field>
+  <div class="field-topline"><span>RESEARCH FIELD</span><span aria-hidden="true">01 — 03</span></div>
+  <div class="field-stage">
+    <svg class="field-fallback" viewBox="0 0 400 200" fill="none" aria-hidden="true">
+      <g stroke="currentColor" opacity="0.5">
+        <ellipse cx="200" cy="100" rx="140" ry="64" />
+        <ellipse cx="200" cy="100" rx="100" ry="64" />
+        <ellipse cx="200" cy="100" rx="50" ry="64" />
+        <path d="M60 100h280M77 70h246M77 130h246" />
+      </g>
+    </svg>
+    <canvas aria-hidden="true"></canvas>
+    <span class="field-coordinate" aria-hidden="true">x / y / possibility</span>
+  </div>
+  <figcaption class="field-caption">
+    <span class="field-caption-label">{t('research.label')}</span>
+    <strong data-field-caption aria-live="polite">{t('research.vision')}</strong>
+  </figcaption>
+  <div class="field-controls" role="group" aria-label={t('research.switch')} hidden>
+    {modes.map((mode, index) => (
+      <button type="button" data-field-mode={index} data-caption={t(`research.${mode}`)} aria-pressed={index === 0}>
+        <span class="font-mono text-xs" aria-hidden="true">0{index + 1}</span> {t(`research.${mode}Short`)}
+      </button>
+    ))}
+  </div>
+</figure>
+
+<script>
+  const field = document.querySelector<HTMLElement>('[data-research-field]');
+  const canvas = field?.querySelector('canvas');
+  const ctx = canvas?.getContext('2d');
+  if (field && canvas && ctx) {
+    const root = document.documentElement;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let mode = 0;
+    let width = 400;
+    let height = 240;
+    let visible = true;
+    let frame = 0;
+    let lastTime = 0;
+    let phase = 0;
+    let pointer = 0;
+    let brand = '';
+    let line = '';
+    const canAnimate = () => visible && !document.hidden && !reduced.matches && root.dataset.motion !== 'off';
+    const palette = () => {
+      const style = getComputedStyle(root);
+      brand = style.getPropertyValue('--color-brand').trim();
+      line = style.getPropertyValue('--color-subtle').trim();
+    };
+
+    function draw() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+      const rows = 13;
+      const columns = 25;
+      const points: { x: number; y: number; depth: number }[][] = [];
+      for (let row = 0; row < rows; row++) {
+        const strip = [];
+        for (let col = 0; col < columns; col++) {
+          const u = col / (columns - 1);
+          const v = row / (rows - 1);
+          let x: number, y: number, depth: number;
+          if (mode === 0) {
+            const angle = u * Math.PI * 2 + phase * 0.18 + pointer * 0.18;
+            const latitude = (v - 0.5) * Math.PI * 0.86;
+            depth = Math.cos(angle) * Math.cos(latitude);
+            x = width * 0.5 + Math.sin(angle) * Math.cos(latitude) * width * 0.35;
+            y = height * 0.48 + Math.sin(latitude) * height * 0.35 + depth * height * 0.1;
+          } else if (mode === 1) {
+            depth = Math.sin(u * 7 + v * 4 + phase);
+            x = width * (0.09 + u * 0.82);
+            y = height * (0.26 + v * 0.46) + depth * height * 0.13 * Math.sin(u * Math.PI);
+          } else {
+            depth = Math.sin(u * 9 - phase * 2 + row * 0.4);
+            x = width * (0.08 + u * 0.84);
+            const spread = 0.2 + Math.abs(u - 0.5) * 1.6;
+            y = height * 0.5 + (v - 0.5) * height * 0.8 * spread + depth * 5;
+          }
+          strip.push({ x, y, depth });
+        }
+        points.push(strip);
+      }
+      for (const strip of points) {
+        ctx.beginPath();
+        strip.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+        ctx.strokeStyle = line;
+        ctx.globalAlpha = 0.2;
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+        for (const p of strip) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.2 + (p.depth + 1) * 0.55, 0, Math.PI * 2);
+          ctx.fillStyle = brand;
+          ctx.globalAlpha = 0.35 + (p.depth + 1) * 0.3;
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function tick(time: number) {
+      if (!canAnimate()) { frame = 0; return; }
+      if (time - lastTime >= 32) {
+        phase += Math.min(time - lastTime, 64) * 0.0005;
+        lastTime = time;
+        draw();
+      }
+      frame = requestAnimationFrame(tick);
+    }
+
+    function sync() {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      palette();
+      draw();
+      if (canAnimate()) {
+        lastTime = performance.now();
+        frame = requestAnimationFrame(tick);
+      }
+    }
+
+    const resize = () => {
+      if (!canvas) return;
+      const bounds = canvas.getBoundingClientRect();
+      width = bounds.width;
+      height = bounds.height;
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      sync();
+    };
+
+    field.dataset.ready = 'true';
+    const controls = field.querySelector<HTMLElement>('.field-controls');
+    if (controls) controls.hidden = false;
+    const buttons = field.querySelectorAll<HTMLButtonElement>('[data-field-mode]');
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      mode = Number(button.dataset.fieldMode);
+      buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      const caption = field.querySelector('[data-field-caption]');
+      if (caption) caption.textContent = button.dataset.caption ?? '';
+      sync();
+    }));
+    field.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse' || !canAnimate()) return;
+      const bounds = field.getBoundingClientRect();
+      pointer = (event.clientX - bounds.left) / bounds.width - 0.5;
+    });
+    new ResizeObserver(resize).observe(canvas);
+    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }).observe(field);
+    new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['class', 'data-motion'] });
+    reduced.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+    resize();
+  }
+</script>

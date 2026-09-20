@@ -19,7 +19,7 @@ const href = alternateHref ?? localePath(stripLangPrefix(Astro.url.pathname), ta
   hreflang={htmlLang[target]}
   aria-label={t('lang.switch')}
   title={t('lang.switch')}
-  class="grid size-8 place-items-center rounded-md text-xs font-medium text-subtle transition-colors hover:bg-surface hover:text-ink"
+  class="grid size-11 place-items-center rounded-md text-xs font-medium text-subtle transition-colors hover:bg-surface hover:text-ink"
 >
   {target === 'en' ? 'EN' : '中'}
 </a>

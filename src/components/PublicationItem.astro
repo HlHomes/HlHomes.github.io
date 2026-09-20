@@ -12,7 +12,7 @@ interface Props {
 
 const { entry, lang } = Astro.props;
 const t = useTranslations(lang);
-const { title, authors, venue, year, note, links, placeholder } = entry.data;
+const { title, authors, attribution, venue, year, note, links, placeholder, type } = entry.data;
 
 const isSelf = (author: string) =>
   PROFILE.authorAliases.some((alias) => alias.toLowerCase() === author.toLowerCase());
@@ -27,12 +27,13 @@ const candidates: ReadonlyArray<[UIKey, string | undefined]> = [
 const linkEntries = candidates.filter((pair): pair is [UIKey, string] => Boolean(pair[1]));
 ---
 
-<article class="border-b border-line py-5 last:border-b-0">
-  <h3 class="text-base leading-snug font-medium">{title}</h3>
+<article class:list={['publication-entry', type === 'journal' && 'publication-featured']}>
+  <span class="publication-kind">{type === 'patent' ? t('publications.patent') : t('publications.paper')}</span>
+  <h3 class="mt-3 text-xl leading-snug font-semibold">{title}</h3>
 
   <p class="mt-1.5 text-sm text-subtle">
     {
-      authors.map((author, i) => (
+      attribution ? attribution[lang] : authors.map((author, i) => (
         <Fragment>
           {i > 0 ? ', ' : ''}
           <span class:list={[isSelf(author) && 'font-semibold text-ink']}>{author}</span>

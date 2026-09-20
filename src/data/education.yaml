@@ -1,12 +1,8 @@
-# 教育背景。每条必须有唯一 id，页面按 start 倒序自动排列。
-# badge 是学校后面的小标签（如 211/985），不需要就删掉整行。
-# highlights 是要点列表，中英各一份；不想显示要点就删掉整个 highlights 段。
-
+# 教育经历只展示学校、专业（学位）与时间。
 - id: swjtu-master
   school:
     zh: 西南交通大学
     en: Southwest Jiaotong University
-  badge: '211'
   degree:
     zh: 硕士
     en: Master's
@@ -15,13 +11,6 @@
     en: Artificial Intelligence
   start: '2024-09'
   end: '2027-06'
-  highlights:
-    zh:
-      - 专业前 5%，研究方向：Low-Level 图像处理（图像恢复、图像去噪、图像增强）
-      - 主修课程：人工智能与机器学习、数理统计、矩阵分析、计算机视觉
-    en:
-      - Top 5% of programme. Research on low-level vision — image restoration, denoising and enhancement.
-      - Coursework — Machine Learning, Mathematical Statistics, Matrix Analysis, Computer Vision.
 
 - id: sctbu-bachelor
   school:
@@ -35,8 +24,3 @@
     en: Computer Science and Technology
   start: '2017-09'
   end: '2021-06'
-  highlights:
-    zh:
-      - 专业前 5%，主修课程：数据结构、操作系统、计算机网络、计算机组成原理
-    en:
-      - Top 5% of programme. Coursework — Data Structures, Operating Systems, Computer Networks, Computer Architecture.

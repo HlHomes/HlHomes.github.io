@@ -7,17 +7,36 @@
   title: 'Degradation-Aware Adaptive Context Gating for Unified Image Restoration'
   authors:
     - Lei He
+  attribution:
+    zh: 第一作者：贺磊
+    en: 'First author: Lei He'
   venue: IEEE Transactions on Image Processing (TIP)
   year: 2026
   type: journal
   note:
-    zh: 在投 · 第一作者 · CCF-A
-    en: Under Review · First Author · CCF-A
+    zh: 已录用，待刊 · CCF-A / SCI 一区
+    en: Accepted, awaiting publication · CCF-A / SCI Q1
   featured: true
   links:
     pdf: https://arxiv.org/pdf/2605.01236
     code: https://github.com/HlHomes/DACG-IR-code
     project: https://arxiv.org/abs/2605.01236
+
+- id: dacg-ir-patent
+  title: '一种退化感知自适应上下文门控图像复原方法及系统'
+  authors:
+    - 贺磊
+  attribution:
+    zh: 第一发明人：贺磊
+    en: 'First inventor: Lei He'
+  venue: '中国发明专利 · 2026105405454'
+  year: 2026
+  type: patent
+  note:
+    zh: 已过初审
+    en: Passed preliminary examination
+  featured: true
+  links: {}
 
 # ────────────────────────────────────────────────────────────
 # 简历里还提到以下成果，但没写标题，我没有编造。

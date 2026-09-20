@@ -22,7 +22,7 @@ export default defineConfig({
         locales: { zh: 'zh-CN', en: 'en-US' },
       },
       // The 404 page is bilingual and exists only at the root, so it has no /en counterpart.
-      filter: (page) => !page.includes('/404'),
+      filter: (page) => !page.includes('/404') && !page.includes('/projects'),
     }),
   ],
 

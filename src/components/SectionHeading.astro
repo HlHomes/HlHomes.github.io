@@ -3,19 +3,22 @@ interface Props {
   title: string;
   href?: string;
   linkLabel?: string;
+  index?: string;
 }
 
-const { title, href, linkLabel } = Astro.props;
+const { title, href, linkLabel, index } = Astro.props;
 ---
 
 <div class="mb-4">
   <div class="flex items-baseline justify-between gap-4 pb-2">
-    <h2 class="text-xs font-medium tracking-[0.15em] text-subtle">{title}</h2>
+    <h2 class="flex items-baseline gap-3 text-xl font-semibold tracking-tight">
+      {index && <span class="font-mono text-xs font-normal text-brand">{index}</span>}{title}
+    </h2>
     {
       href && linkLabel && (
         <a
           href={href}
-          class="link-underline shrink-0 text-xs text-brand transition-opacity hover:opacity-80"
+          class="link-underline shrink-0 text-sm text-brand transition-opacity hover:opacity-80"
         >
           {linkLabel} →
         </a>

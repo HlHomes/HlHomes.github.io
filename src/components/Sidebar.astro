@@ -19,7 +19,6 @@ const socials = SOCIALS.filter((s) => s.url);
 const navItems: ReadonlyArray<{ key: UIKey; path: string }> = [
   { key: 'nav.home', path: '/' },
   { key: 'nav.publications', path: '/publications' },
-  { key: 'nav.projects', path: '/projects' },
   { key: 'nav.blog', path: '/blog' },
 ];
 
@@ -29,7 +28,7 @@ const isActive = (path: string) =>
 ---
 
 <aside
-  class="border-b border-line py-5 lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-56 lg:shrink-0 lg:flex-col lg:justify-between lg:border-b-0 lg:py-16"
+  class="site-sidebar border-b border-line py-5 lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-60 lg:shrink-0 lg:flex-col lg:justify-between lg:border-b-0 lg:py-14"
 >
   <div class="flex flex-col gap-5 lg:gap-8">
     <div class="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-4">
@@ -46,11 +45,11 @@ const isActive = (path: string) =>
       <div class="min-w-0 flex-1 lg:flex-none">
         <a
           href={home}
-          class="block truncate bg-gradient-to-br from-ink to-subtle bg-clip-text text-base font-semibold tracking-tight text-transparent"
+          class="block text-2xl font-semibold tracking-tight text-ink"
         >
           {PROFILE.name[lang]}
         </a>
-        <p class="mt-1 hidden text-xs leading-relaxed text-subtle lg:block">
+        <p class="mt-2 hidden text-sm leading-relaxed text-subtle lg:block">
           {PROFILE.tagline[lang]}
         </p>
 
@@ -59,7 +58,7 @@ const isActive = (path: string) =>
           <div class="rule-fade mb-2"></div>
           {
             PROFILE.affiliations.map((item) => (
-              <p class="text-xs leading-relaxed text-subtle">{item[lang]}</p>
+              <p class="text-sm leading-relaxed text-subtle">{item[lang]}</p>
             ))
           }
           <p class="text-xs text-subtle">{PROFILE.location[lang]}</p>
@@ -73,7 +72,7 @@ const isActive = (path: string) =>
       </div>
     </div>
 
-    <nav class="flex gap-5 text-sm lg:flex-col lg:gap-1">
+    <nav class="main-nav flex flex-wrap gap-5 text-base lg:flex-col lg:gap-2" aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
       {
         navItems.map((item) => (
           <a
@@ -97,10 +96,10 @@ const isActive = (path: string) =>
     </nav>
   </div>
 
-  <div class="mt-8 hidden lg:flex lg:flex-col lg:gap-5">
+  <div class="mt-6 flex flex-col gap-5 lg:mt-8">
     {
       socials.length > 0 && (
-        <div class="flex flex-col gap-1.5 text-sm">
+        <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm lg:flex-col">
           {socials.map((s) => (
             <a
               href={s.url}
@@ -114,7 +113,7 @@ const isActive = (path: string) =>
         </div>
       )
     }
-    <div class="flex items-center gap-1">
+    <div class="hidden items-center gap-1 lg:flex">
       <LangSwitch lang={lang} alternateHref={alternateHref} />
       <ThemeToggle lang={lang} />
     </div>
